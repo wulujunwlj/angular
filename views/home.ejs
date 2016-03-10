@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngComponents">
+	<head>
+		<meta charset="UTF-8">
+		<title><%= title %></title>
+
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+		<script src="angular/angular.js"></script>
+		<script src="angular-route/angular-route.js"></script>
+		<script src="oclazyload/dist/oaLazyLoad.min.js"></script>
+	</head>
+
+	<body>
+		<div class="container" ng-controller="MainCtrl">
+			<h1>angular components home</h1>
+			<!-- <ul class="list-unstyled">
+				<% for(var i = 0; i < componentsList.length; i++) { %>
+					<li>
+						<a href="<%= componentsList[i]['link'] %>"><%= componentsList[i]['name'] %></a>
+					</li>
+				<% } %>
+			</ul> -->
+
+			<div ng-view></div>
+		</div>
+
+		<script src="src/scripts/app.js"></script>
+		<script src="src/scripts/router.js"></script>
+		<script src="src/scripts/controllers/main-controller.js"></script>
+	</body>
+</html>

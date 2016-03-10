@@ -1,0 +1,8 @@
+
+<div>
+	<ul class="list-unstyled">
+		<li ng-repeat="component in app.componentsList track by $index">
+			<a ng-href="/#/app/kshTable" title="{{ component.title }}">{{ :: component.name }}</a>
+		</li>
+	</ul>
+</div>
