@@ -15,7 +15,7 @@ module.exports = function (grunt) {
 				src: [
 					'<%= pkg.gruntConfig.srcDirRoot %>/scripts/app.js', 
 					'<%= pkg.gruntConfig.srcDirRoot %>/scripts/config.lazyload.js', 
-					'<%= pkg.gruntConfig.srcDirRoot %>/scripts/router.js'
+					'<%= pkg.gruntConfig.srcDirRoot %>/scripts/config.router.js'
 				],
 				dest: '<%= pkg.gruntConfig.destDirRoot %>/main.js',
 			}

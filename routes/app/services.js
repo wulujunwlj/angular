@@ -11,6 +11,10 @@ router.get('/getComponentsList', function(req, res) {
   			name: 'ksh-table',
   			title: '表格组件',
   			link: '/app/kshTable'
+  		}, {
+  			name: 'angular-form-for',
+  			title: '表单验证',
+  			link: '/app/formFor'
   		}
   	]);
 });

@@ -32,6 +32,16 @@
 				};
 				ocLazyLoadConfig.modules.push(moduleConfig);
 
+				// angular-form-for module config
+				moduleConfig = {
+					name: 'formFor',
+					files: [
+						'angular-form-for/dist/form-for.css',
+						'angular-form-for/dist/form-for.js',
+					]
+				};
+				ocLazyLoadConfig.modules.push(moduleConfig);
+
 				$ocLazyLoadProvider.config(ocLazyLoadConfig);
 			}
 		]);
