@@ -19,5 +19,16 @@
     "ng-table": "^0.5.4",
     "oclazyload": "^1.0.9",
     "serve-favicon": "~2.3.0"
+  },
+  "devDependencies": {
+    "angular-form-for": "^4.1.11",
+    "angular-validation": "^1.4.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-jshint": "^1.0.0"
+  },
+  "gruntConfig": {
+    "srcDirRoot": "app/src",
+    "destDirRoot": "app/dist"
   }
 }

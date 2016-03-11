@@ -30,7 +30,7 @@
 
 			return vm;
 		}])
-		.controller('kshTableCtrl', ['$scope', '$http', 'ngTable', function($scope, $http, ngTable) {
+		.controller('kshTableCtrl', ['$scope', '$http', 'NgTableParams', function($scope, $http, NgTableParams) {
 			var vm = this;
 
 			vm.title = 'kshTableCtrl';
@@ -38,6 +38,8 @@
 			$http.get('/services/getTableData')
 				.success(function(data) {
 					console.log(data);
+					
+					vm.tableParams = new NgTableParams({}, { dataset: data });
 				})
 				.error(function(msg) {
 					console.log(msg);

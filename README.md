@@ -3,5 +3,5 @@ angular-components
 
 ## useful Angular plugins
 * angular-route
-* oclazyload
-* ng-table
+* [oclazyload](https://oclazyload.readme.io/)
+* [ng-table](http://ng-table.com/)
