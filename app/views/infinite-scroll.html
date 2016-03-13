@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>Angular Infinite Scroll</title>
+
+	<style>
+	#container {
+		height: 400px;
+		overflow: auto;
+	}
+	ul.list-unstyled {
+		list-style: none;
+	}
+	li {
+		height: 120px;
+		border-bottom: 1px solid #000;
+	}
+	</style>
+
+	<script src="./../../node_modules/angular/angular.js"></script>
+</head>
+
+<body>
+	<div ng-controller="MainCtrl">
+		<div id="container" infinite-scroll="loadMore">
+			<ul class="list-unstyled">
+				<li ng-repeat="item in items track by $index">{{ item.name }}</li>
+			</ul>
+		</div>
+	</div>
+
+	<script>
+		(function(angular) {
+			'use strict';
+
+			angular.module('app', [])
+				// .directive('infiniteScroll', ['$http', 
+				// 	function ($http) {
+				// 		return {
+				// 			restrict: 'A',
+				// 			link: function (scope, elem, attrs) {
+				// 				var raw = elem[0];
+
+				// 				elem.bind('scroll', function() {
+				// 					if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+				// 						scope.$apply(attrs.infiniteScroll);
+				// 					}
+				// 				});
+				// 			}
+				// 		};
+				// 	}
+				// ])
+				.directive('infiniteScroll', function() {
+					return function(scope, elem, attrs) {
+						var raw = elem[0];
+
+						elem.bind('scroll', function() {
+							if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+								scope.$apply(attrs.infiniteScroll);
+							}
+						});
+					}
+				})
+				.controller('MainCtrl', ['$scope', 
+					function ($scope) {
+						$scope.items = [];
+
+						var counter = 0;
+						$scope.loadMore = function() {
+							for (var i = 0; i < 5; i++) {
+								$scope.items.push({ name: counter });
+								counter += 10;
+							}
+						};
+
+						$scope.loadMore();
+					}
+				]);
+		})(angular);
+	</script>
+</body>
+</html>
