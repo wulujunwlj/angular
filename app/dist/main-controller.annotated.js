@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('AngComponents')
-		.controller('MainCtrl', function($scope) {
+		.controller('MainCtrl', ['$scope', function($scope) {
 			var vm = this;
 
 			vm.users = [
@@ -14,8 +14,8 @@
 			];
 
 			return vm;
-		})
-		.controller('appCtrl', function($scope, $http) {
+		}])
+		.controller('appCtrl', ['$scope', '$http', function($scope, $http) {
 			var vm = this;
 
 			vm.title = 'appCtrl';
@@ -29,8 +29,8 @@
 				});
 
 			return vm;
-		})
-		.controller('kshTableCtrl', function($scope, $http, NgTableParams) {
+		}])
+		.controller('kshTableCtrl', ['$scope', '$http', 'NgTableParams', function($scope, $http, NgTableParams) {
 			var vm = this;
 
 			vm.title = 'kshTableCtrl';
@@ -46,7 +46,7 @@
 				});
 
 			return vm;
-		})
+		}])
 		.controller('ngFormForCtrl', ['$scope', 'FormForConfiguration', 
 			function($scope, FormForConfiguration) {
 				var vm = this;

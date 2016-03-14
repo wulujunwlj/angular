@@ -7,3 +7,8 @@
 * [谈谈angular项目构建中的组织结构](http://my.oschina.net/blogshi/blog/322883?fromerr=GydtJcSz)
 
 ### 代码规范
+
+### form 相关
+* [Form creation and validation:angular-form-for](https://github.com/bvaughn/angular-form-for/)
+* [Angular Form Builder](https://github.com/kelp404/angular-form-builder)
+* 

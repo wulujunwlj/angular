@@ -25,7 +25,10 @@
     "angular-validation": "^1.4.1",
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0"
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-html2js": "^0.3.5",
+    "grunt-ng-annotate": "^2.0.1",
+    "load-grunt-tasks": "^3.4.1"
   },
   "gruntConfig": {
     "srcDirRoot": "app/src",
