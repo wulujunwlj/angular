@@ -8,12 +8,17 @@ Project Description
 ├── angular-components
 │   ├── app
 │   │   ├── app.js
+│   │   ├── core
 │   │   ├── components
 │   │   │   ├── components.module.js
 │   │   │   ├── components.config.js
 │   │   │   ├── components.config.lazyload.js
 │   │   │   ├── components.routes.js
 │   │   │   ├── conow-grid
+│   │   │   │   ├── demo
+│   │   │   │   │   ├── index.html
+│   │   │   │   │   ├── conow-grid.js
+│   │   │   │   ├── conow-grid.less
 │   │   │   │   ├── conow-grid.directive.js
 │   │   │   │   ├── conow-grid.directive.spec.js
 │   │   │   │   ├── conow-grid.service.js
@@ -22,6 +27,10 @@ Project Description
 │   │   │   │   ├── conow-grid.filter.spec.js
 │   │   │   │   └── conow-grid.tpl.html
 │   │   │   ├── conow-validator
+│   │   │   │   ├── demo
+│   │   │   │   │   ├── index.html
+│   │   │   │   │   ├── conow-validator.js
+│   │   │   │   ├── conow-validator.less
 │   │   │   │   ├── conow-validator.directive.js
 │   │   │   │   ├── conow-validator.directive.spec.js
 │   │   │   │   ├── conow-validator.service.js
