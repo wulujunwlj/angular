@@ -3,15 +3,19 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('home', { 
-  	title: 'angular-components', 
-  	componentsList: [
-  		{
-  			name: 'ksh-table',
-  			link: '/app/kshTable'
-  		}
-  	]
-  });
+  // res.render('home', { 
+  // 	title: 'angular-components', 
+  // 	componentsList: [
+  // 		{
+  // 			name: 'ksh-table',
+  // 			link: '/app/kshTable'
+  // 		}
+  // 	]
+  // });
+  
+	res.render('./../webapp/build/home', {
+		title: 'angular-components'
+	});
 });
 
 module.exports = router;

@@ -1,95 +1,150 @@
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 	'use strict';
 
-	require('load-grunt-tasks')(grunt);
-
-	grunt.initConfig({
+	var userConfig = require('./build.config.js');
+	var taskConfig = {
 		pkg: grunt.file.readJSON('./package.json'),
 
-		concat: {
-			options: {
-				separator: '\n;',
-				banner: '/* <%= grunt.template.date("yyyy-mm-dd") %> */\n'
-
-			},
-			dist: {
-				src: [
-					'<%= pkg.gruntConfig.srcDirRoot %>/scripts/app.js', 
-					'<%= pkg.gruntConfig.srcDirRoot %>/scripts/config.lazyload.js', 
-					'<%= pkg.gruntConfig.srcDirRoot %>/scripts/config.router.js'
-				],
-				dest: '<%= pkg.gruntConfig.destDirRoot %>/main.js',
-			}
-		},
-
-		jshint: {
-			// all: ['Gruntfile.js', '<%= pkg.gruntConfig.srcDirRoot %>/scripts/*.js']
-			beforeconcat: [
-				'<%= pkg.gruntConfig.srcDirRoot %>/scripts/app.js', 
-				'<%= pkg.gruntConfig.srcDirRoot %>/scripts/config.lazyload.js', 
-				'<%= pkg.gruntConfig.srcDirRoot %>/scripts/config.router.js'
-			],
-			afterconcat: [
-				'<%= pkg.gruntConfig.destDirRoot %>/main.js'
+		/**
+		 * 文件/目录 删除
+		 */
+		clean: {
+			build: [
+				'webapp/build/vendor'
 			]
 		},
 
-		ngAnnotate: {
-			options: {
-				singleQuotes: true,
+		/**
+		 * 文件复制
+		 *
+		 * vendor 目录需要配置:配置 build.config.js 中的 vendorFiles
+		 */
+		copy: {
+			// buildVendorassets: {
+			// 	files: [
+			// 		{
+			// 			src: [ '<%= vendorFiles.assetsFiles %>' ],
+			// 			dest: '<%= buildDir %>/vendor/assets/',
+			// 			expand: true,
+			// 			flatten: true
+			// 		}
+			// 	]
+			// },
+
+			buildVendorjs: {
+				files: [
+					{
+						src: [ '<%= vendorFiles.jsFiles %>' ],
+						dest: '<%= buildDir %>/vendor/scripts/',
+						flatten: true,
+						expand: true
+					}
+				]
 			},
-			app1: {
-				files: {
-					'<%= pkg.gruntConfig.destDirRoot %>/main-controller.annotated.js': ['<%= pkg.gruntConfig.srcDirRoot %>/scripts/controllers/main-controller.js']
-				}
+
+			buildVendorcss: {
+				files: [
+					{
+						src: [ '<%= vendorFiles.cssFiles %>' ],
+						dest: '<%= buildDir %>/vendor/styles/',
+						flatten: true,
+						expand: true
+					}
+				]
 			},
-			app2: {
-				files: {
-					expand: true,
-					src: '<%= pkg.gruntConfig.srcDirRoot %>/scripts/controllers/*.js',
-					ext: '.annotated.js',
-					extDot: 'last',
-				}
+
+			buildApp: {
+				files: [
+					{
+						src: 
+					}
+				]
 			}
 		},
 
-		html2js: {
-			options: {
-				base: 'app',
-				module: 'myApp.templates',
-				singleModule: true,
-				useStrict: true,
-				htmlmin: {
-					collapseBooleanAttributes: true,
-					collapseWhitespace: true,
-					removeAttributeQuotes: true,
-					removeComments: true,
-					removeEmptyAttributes: true,
-					removeRedundantAttributes: true,
-					removeScriptTypeAttributes: true,
-					removeStyleLinkTypeAttributes: true
-				}
+		/**
+		 * build 生成首页文件
+		 */
+		index: {
+			build: {
+				dir: '<%= buildDir %>',
+				src: [
+					'<%= vendorFiles.jsFiles %>',
+					'<%= buildDir %>/src/**/*.js',
+					'vendorFiles.cssFiles',
+					'<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+				]
 			},
-			main: {
-				src: ['app/scripts/**/*.html'],
-				dest: 'app/scripts/populate_template_cache.js'
+
+			compile: {
+				dir: '<%= compileDir %>',
+				src: [
+					'<%= vendorFiles.cssFiles %>',
+					'<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+				]
 			}
-		}
+		},
+
+	};
+
+
+	grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
+
+	// grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-clean');
+
+	grunt.registerTask( 'default' , 'This is the default task of ' + taskConfig.pkg.name + ' grunt', function() {
+		grunt.log.writeln('This is the default task of ' + taskConfig.pkg.name + ' grunt');
+		
+		// grunt.log.writeln(grunt.config()['pkg']['name']);
 	});
 
-	// grunt.loadNpmTasks('grunt-contrib-concat');
-	// grunt.loadNpmTasks('grunt-contrib-jshint');
-	// grunt.loadNpmTasks('grunt-ng-annotate');
-	// grunt.loadNpmTasks('load-grunt-tasks');
+	function filterForJS (files) {
+		return files.filter( function ( file ) {
+			return file.match(/\.js$/);
+		});
+	}
 
-	grunt.registerTask('default', 'Default task', function() {
-		grunt.log.writeln('This is the default task running...');
+	function filterForCSS ( files ) {
+		return files.filter( function (file) {
+			return file.match(/\.css$/);
+		});
+	}
+
+	/**
+	 * 动态编译 js 和 css 文件到首页
+	 */
+	grunt.registerMultiTask('index', 'Process index.html template', function () {
+		var dirRE = new RegExp( '^(' + grunt.config('buildDir') + '|' + grunt.config('compileDir') + ')\/', 'g' );
+		var jsFiles = filterForJS( this.filesSrc ).map( function ( file ) {
+		  return file.replace( dirRE, '' );
+		});
+		var cssFiles = filterForCSS( this.filesSrc ).map( function ( file ) {
+		  return file.replace( dirRE, '' );
+		});
+
+		grunt.file.copy(userConfig.buildRootDir + '/src/index.html', userConfig.buildRootDir + '/build/index.html', {
+			process: function ( contents, path ) {
+				return grunt.template.process( contents, {
+					data: {
+						scripts: jsFiles,
+						styles: cssFiles,
+						version: grunt.config( 'pkg.version' )
+					}
+				})
+			}
+		})
 	});
 
-	grunt.registerTask('concatMain', ['concat:dist']);
+	grunt.registerTask('copyVendorFiles', ['copy']);
 
-	grunt.registerTask('jshintMain', ['jshint:all']);
+	grunt.registerTask('cleanBuild', ['clean']);
 
-	grunt.registerTask('annotationCtrls', ['ngAnnotate:app1']);
+	grunt.registerTask('build', [
+		'clean', 'copy:buildVendorjs', 'copy:buildVendorcss',
+		// 'clean', 'copy', 'index:build'
+	]);
+
 };

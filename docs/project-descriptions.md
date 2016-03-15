@@ -5,54 +5,43 @@ Project Description
 
 ### V0.3:
 ```
-├── angular-components
-│   ├── app
-│   │   ├── app.js
-│   │   ├── core
-│   │   ├── components
-│   │   │   ├── components.module.js
-│   │   │   ├── components.config.js
-│   │   │   ├── components.config.lazyload.js
-│   │   │   ├── components.routes.js
-│   │   │   ├── conow-grid
-│   │   │   │   ├── demo
-│   │   │   │   │   ├── index.html
-│   │   │   │   │   ├── conow-grid.js
-│   │   │   │   ├── conow-grid.less
-│   │   │   │   ├── conow-grid.directive.js
-│   │   │   │   ├── conow-grid.directive.spec.js
-│   │   │   │   ├── conow-grid.service.js
-│   │   │   │   ├── conow-grid.service.spec.js
-│   │   │   │   ├── conow-grid.filter.js
-│   │   │   │   ├── conow-grid.filter.spec.js
-│   │   │   │   └── conow-grid.tpl.html
-│   │   │   ├── conow-validator
-│   │   │   │   ├── demo
-│   │   │   │   │   ├── index.html
-│   │   │   │   │   ├── conow-validator.js
-│   │   │   │   ├── conow-validator.less
-│   │   │   │   ├── conow-validator.directive.js
-│   │   │   │   ├── conow-validator.directive.spec.js
-│   │   │   │   ├── conow-validator.service.js
-│   │   │   │   ├── conow-validator.service.spec.js
-│   │   │   │   ├── conow-validator.filter.js
-│   │   │   │   ├── conow-validator.filter.spec.js
-│   │   │   │   └── conow-validator.tpl.html
-│   │   ├── hr
-│   │   ├── oa
-│   │   ├── fm
-│   │   ├── build
+├── webapp
+│   ├── build
+│   ├── vendor
+│   ├── src
+│   │   ├── app
 │   │   │   ├── app.js
+│   │   │   ├── index.html
+│   │   │   ├── core
 │   │   │   ├── components
-│   │   │   │   ├── components.main.js
-│   │   │   │   ├── conow-grid.js
-│   │   │   │   └── conow-validator.js
-│   │   │   ├── hr
-│   │   │   │   ├── hr.main.js
-│   │   │   ├── oa
-│   │   │   │   ├── oa.main.js
-│   │   │   ├── fm
-│   │   │   │   ├── fm.main.js
+│   │   │   │   ├── components.config.js
+│   │   │   │   ├── components.config.lazyload.js
+│   │   │   │   ├── components.module.js
+│   │   │   │   ├── components.routes.js
+│   │   │   │   ├── conow-grid
+│   │   │   │   │   ├── demo
+│   │   │   │   │   │   ├── index.html
+│   │   │   │   │   │   ├── conow-grid.js
+│   │   │   │   │   ├── conow-grid.less
+│   │   │   │   │   ├── conow-grid.directive.js
+│   │   │   │   │   ├── conow-grid.directive.spec.js
+│   │   │   │   │   ├── conow-grid.service.js
+│   │   │   │   │   ├── conow-grid.service.spec.js
+│   │   │   │   │   ├── conow-grid.filter.js
+│   │   │   │   │   ├── conow-grid.filter.spec.js
+│   │   │   │   │   └── conow-grid.tpl.html
+│   │   │   │   ├── conow-validator
+│   │   │   │   │   ├── demo
+│   │   │   │   │   │   ├── index.html
+│   │   │   │   │   │   ├── conow-validator.js
+│   │   │   │   │   ├── conow-validator.less
+│   │   │   │   │   ├── conow-validator.directive.js
+│   │   │   │   │   ├── conow-validator.directive.spec.js
+│   │   │   │   │   ├── conow-validator.service.js
+│   │   │   │   │   ├── conow-validator.service.spec.js
+│   │   │   │   │   ├── conow-validator.filter.js
+│   │   │   │   │   ├── conow-validator.filter.spec.js
+│   │   │   │   │   └── conow-validator.tpl.html
 ```
 
 ### V0.2:

@@ -11,4 +11,20 @@
 ### form 相关
 * [Form creation and validation:angular-form-for](https://github.com/bvaughn/angular-form-for/)
 * [Angular Form Builder](https://github.com/kelp404/angular-form-builder)
-* 
+
+### 测试相关
+* karma
+* karma-firefox-launcher
+* karma-chrome-launcher
+* karma-jasmine
+
+### bower 管理依赖
+* angular
+* [angular-mocks](https://www.npmjs.com/package/angular-mocks)
+* bootstrap
+* angular-bootstrap
+* angular-ui-router
+
+### grunt-todos
+* 开发环境和生产环境分别执行 grunt 对应的命令，生成各个模块的配置文件(开发环境 concat 不用 Uglify，生产环境 concat 再 uglify)
+* grunt 生成的文件加上版本号，用于缓存的处理
