@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>跳转中...</title>
+
+	<style>
+	.redirect-container {
+		font-size: 20px;
+		background: #F3EFEF;
+		width: 500px;
+		height: 300px;
+		margin: 200px auto;
+		padding: 20px;
+		position: relative;
+	}
+	.redirect-tip {
+		margin-top: 20px;
+		text-align: center;
+	}
+	.redirect-row {
+		position: absolute;
+		width: 100%;
+		bottom: 20px;
+	}
+	.redirect-count-down {
+		display: inline-block;
+		width: 45%;
+		text-align: right;
+	}
+	.auto-redirect {
+		display: inline-block;
+		width: 45%;
+		text-align: left;
+	}
+	.row.blank {
+		height: 30px;
+	}
+	#dot-dot-dot {
+		display: inline-block;
+		width: 30px;
+	}
+	#count-down-seconds {
+		color: #3D39FF;
+	}
+	</style>
+</head>
+
+<body>
+	<div class="redirect-container">
+		<div class="redirect-tip">
+			<form>
+				<div class="row">
+					该环境已经迁移到新的服务器,
+				</div>
+				<div class="row blank"></div>
+				<div class="row">
+					正在为您自动跳转<span class="dot-dot-dot" id="dot-dot-dot">.</span>
+				</div>
+				<div class="row blank"></div>
+				<div class="row">
+					<a href="" id="add-favorite">收藏最新地址</a>
+				</div>
+				<div class="row redirect-row">
+					<div class="redirect-count-down">
+						<span>倒计时:</span>
+						<span class="count-down-seconds" id="count-down-seconds">5</span>
+						<span>秒</span>
+					</div>
+					<div class="auto-redirect">
+						<a href="http://159.226.97.164"> 直接访问>> </a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		(function(window) {
+			var secondTimeoutHandler = null,
+				dotTimeoutHandler = null;
+
+			window.onload = function() {
+				var countDownSeconds = document.getElementById('count-down-seconds'),
+					dotDotDot = document.getElementById('dot-dot-dot'),
+					addFavorite = document.getElementById('add-favorite'),
+					secondsCount = 5,
+					dotCount = 0;
+
+				setTime(secondsCount);
+				setDot(dotCount);
+
+				addFavorite.addEventListener('click', function() {
+					addFavoriteFn('http://159.226.97.164', '159');
+				});
+
+				function setTime(count) {
+					if (count < 0) {
+						// window.location.href = 'http://159.226.97.164';
+					} else {
+						countDownSeconds.innerHTML = count;
+						count --;
+
+						secondTimeoutHandler = setTimeout(function() {
+							setTime(count);
+						}, 1000);
+					}		
+
+				}
+
+				function setDot(count) {
+					if (count % 4) {
+						dotDotDot.innerHTML = dotDotDot.innerHTML + '.';
+					} else {
+						dotDotDot.innerHTML = '';
+					}
+					count ++;
+
+					dotTimeoutHandler = setTimeout(function() {
+						setDot(count);
+					}, 1000);
+				}
+			}
+
+			function addFavoriteFn(siteUrl, siteName) {
+				//捕获加入收藏过程中的异常       
+				try {
+					window.external.addFavorite(siteUrl, siteName)
+			    } catch (e) {
+			    	try {
+			    		window.sidebar.addPanel(siteName, siteUrl, '');
+			    	} catch (e) {
+			    		alert("加入收藏夹失败，请使用Ctrl+D快捷键进行添加操作!");
+			    	}     
+			    }
+			}
+
+			window.onbeforeunload = function() {
+				clearTimeout(secondTimeoutHandler);
+				clearTimeout(dotTimeoutHandler);
+			}
+		})(window);
+	</script>
+</body>
+</html>

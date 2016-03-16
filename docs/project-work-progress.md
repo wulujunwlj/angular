@@ -48,4 +48,10 @@ grunt 相关插件使用
 * 20160314:考虑把 controller 的代码移出到 service
 
 ## schedules
-* 20160315:项目文件结构、less 编译、js concat + js uglify + js hint、watch
+* 20160315:项目文件结构、js copy、clean
+* 20160316:less 编译、cssmin、js concat + js uglify(dev/prod 分别对应不同的配置)
+* 20160317:js hint、watch、livereload
+* 20160318:ng-annotate、jscs、cachebuster
+
+* 20160321 - 20160323:unit test
+* jsdoc/yuidoc:待定

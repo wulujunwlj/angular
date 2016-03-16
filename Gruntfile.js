@@ -12,6 +12,15 @@ module.exports = function(grunt) {
 		clean: {
 			build: [
 				'webapp/build/vendor'
+			],
+			cleanVendorFiles: [
+				'webapp/build/vendor'
+			],
+			cleanAssetsLess: [
+				'webapp/build/assets/less'
+			],
+			cleanAllBuild: [
+				'webapp/build/'
 			]
 		},
 
@@ -54,13 +63,24 @@ module.exports = function(grunt) {
 				]
 			},
 
-			buildApp: {
+			// buildApp: {
+			// 	files: [
+			// 		{
+			// 			src: 
+			// 		}
+			// 	]
+			// },
+
+			copyLess: {
 				files: [
 					{
-						src: 
+						src: ['webapp/src/app/components/**/*.less'],
+						dest: '<%= buildDir %>/assets/less/',
+						flatten: true,
+						expand: true
 					}
 				]
-			}
+			},
 		},
 
 		/**
@@ -86,6 +106,51 @@ module.exports = function(grunt) {
 			}
 		},
 
+		less: {
+			build: {
+				expand: true,
+				cwd: 'webapp/build/assets/less/',
+				src: ['**/*.less'],
+				dest: 'webapp/build/assets/styles/',
+				ext: '.css'
+			},
+			compile: {
+				files: {
+					'<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%=  %>'
+				}
+			}
+		},
+
+		cssmin: {
+			options: {
+				shorthandCompacting: false,
+				roundingPrecision: -1,
+				report: 'gzip',
+			},
+			build: {
+				files: [
+					{
+						expand: true,
+						cwd: 'webapp/build/assets/styles/',
+						src: ['*.css', '!*.min.css'],
+						dest: 'webapp/build/assets/styles',
+						ext: '.min.css'
+					}
+				]
+			},
+			compile: {
+				files: [
+					{
+						expand: true,
+						cwd: 'webapp/build/assets/styles/',
+						src: ['*.css', '!*.min.css'],
+						dest: 'webapp/build/assets/styles',
+						ext: '.min.css'
+					}
+				]	
+			}
+		},
+
 	};
 
 
@@ -94,6 +159,8 @@ module.exports = function(grunt) {
 	// grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 	grunt.registerTask( 'default' , 'This is the default task of ' + taskConfig.pkg.name + ' grunt', function() {
 		grunt.log.writeln('This is the default task of ' + taskConfig.pkg.name + ' grunt');
@@ -146,5 +213,8 @@ module.exports = function(grunt) {
 		'clean', 'copy:buildVendorjs', 'copy:buildVendorcss',
 		// 'clean', 'copy', 'index:build'
 	]);
+
+	grunt.registerTask('cleanAllBuild', ['clean:cleanAllBuild']);
+	grunt.registerTask('buildCss', ['clean:cleanAssetsLess', 'copy:copyLess', 'less:build', 'cssmin:build']);
 
 };

@@ -10,6 +10,12 @@ module.exports = {
 
 	compileDir: 'webapp/bin',
 
+	appFiles: {
+		lessFiles: [
+			// 
+		]
+	},
+
 	vendorFiles: {
 		jsFiles: [
 			'webapp/vendor/angular/angular.js',
