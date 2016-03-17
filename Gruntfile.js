@@ -10,24 +10,45 @@ module.exports = function(grunt) {
 		 * 文件/目录 删除
 		 */
 		clean: {
-			build: [
-				'webapp/build/vendor'
-			],
 			cleanVendorFiles: [
-				'webapp/build/vendor'
+				'webapp/build/vendor/'
 			],
-			cleanAssetsLess: [
-				'webapp/build/assets/less'
+			cleanAssets: [
+				'webapp/build/assets/'
 			],
-			cleanAllBuild: [
-				'webapp/build/'
+			cleanAssetsStyles: [
+				'<%= buildDir %>/styles/'
+			],
+			build: [
+				'<%= buildDir %>/'
+			],
+			dist: [
+				'webapp/dist/'
 			]
+		},
+
+		uglify: {
+			options: {
+				// 
+			},
+			build: {
+				files: {
+					'<%= buildDir %>/src/app.min.js': ['<%= srcDir %>/app.js'],
+					'<%= buildDir %>/src/components/components.min.js': ['<%= srcDir %>/components/*.js'],
+				}
+			},
+			dist: {
+				files: {
+					'<%= buildDir %>/src/app.min.js': ['<%= srcDir %>/app.js'],
+					'<%= buildDir %>/src/components/components.min.js': ['<%= srcDir %>/components/*.js'],
+				}
+			}
 		},
 
 		/**
 		 * 文件复制
 		 *
-		 * vendor 目录需要配置:配置 build.config.js 中的 vendorFiles
+		 * vendor 目录需要配置 build.config.js 中的 vendorFiles
 		 */
 		copy: {
 			// buildVendorassets: {
@@ -63,14 +84,6 @@ module.exports = function(grunt) {
 				]
 			},
 
-			// buildApp: {
-			// 	files: [
-			// 		{
-			// 			src: 
-			// 		}
-			// 	]
-			// },
-
 			copyLess: {
 				files: [
 					{
@@ -81,6 +94,20 @@ module.exports = function(grunt) {
 					}
 				]
 			},
+		},
+
+		concat: {
+			buildCss: {
+				src: ['<%= buildDir %>/assets/styles/*.css', '!<%= buildDir %>/assets/styles/*.min.css'],
+				dest: '<%= buildDir %>/assets/styles/main.css',
+			},
+			distCss: {
+				src: ['!<%= buildDir %>/assets/styles/*.css', '<%= buildDir %>/assets/styles/*.min.css'],
+				dest: '<%= distDir %>/assets/styles/main.min.css',		
+			},
+			buildJs: {
+				// 
+			}
 		},
 
 		/**
@@ -109,14 +136,14 @@ module.exports = function(grunt) {
 		less: {
 			build: {
 				expand: true,
-				cwd: 'webapp/build/assets/less/',
+				cwd: '<%= buildDir %>/assets/less/',
 				src: ['**/*.less'],
-				dest: 'webapp/build/assets/styles/',
+				dest: '<%= buildDir %>/assets/styles/',
 				ext: '.css'
 			},
-			compile: {
+			dist: {
 				files: {
-					'<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%=  %>'
+					// '<%= distDir %>/assets/styles/<%= pkg.name %>-<%= pkg.version %>.css': '<%=  %>'
 				}
 			}
 		},
@@ -125,20 +152,24 @@ module.exports = function(grunt) {
 			options: {
 				shorthandCompacting: false,
 				roundingPrecision: -1,
-				report: 'gzip',
+				banner: '/*! <%= pkg.name => <%= grunt.template.today("yyyy-mm-dd") %>*/\n',
+				beautify: {
+					// 中文 ascii 化，防止中文乱码
+					ascii_only: true
+				}
 			},
 			build: {
 				files: [
 					{
 						expand: true,
-						cwd: 'webapp/build/assets/styles/',
+						cwd: '<%= buildDir %>/assets/styles/',
 						src: ['*.css', '!*.min.css'],
-						dest: 'webapp/build/assets/styles',
+						dest: '<%= buildDir %>/assets/styles/',
 						ext: '.min.css'
 					}
 				]
 			},
-			compile: {
+			dist: {
 				files: [
 					{
 						expand: true,
@@ -148,16 +179,26 @@ module.exports = function(grunt) {
 						ext: '.min.css'
 					}
 				]	
+			},
+			compress: {
+				files: {
+					'<%= buildDir %>/assets/styles/main.css': ['<%= buildDir %>/assets/styles/*.css']
+				}
+			},
+			compressMin: {
+				files: {
+					'assets/styles/main.min.css': ['<%= webapp/build/assets/styles/*.min.css %>']
+				}
 			}
 		},
 
 	};
 
-
 	grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
 
-	// grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -205,16 +246,23 @@ module.exports = function(grunt) {
 		})
 	});
 
-	grunt.registerTask('copyVendorFiles', ['copy']);
+	// grunt.registerTask('copyVendorFiles', ['copy']);
 
-	grunt.registerTask('cleanBuild', ['clean']);
+	// grunt.registerTask('cleanBuild', ['clean']);
 
-	grunt.registerTask('build', [
-		'clean', 'copy:buildVendorjs', 'copy:buildVendorcss',
-		// 'clean', 'copy', 'index:build'
-	]);
+	// grunt.registerTask('build', [
+	// 	'clean', 'copy:buildVendorjs', 'copy:buildVendorcss',
+	// 	// 'clean', 'copy', 'index:build'
+	// ]);
 
-	grunt.registerTask('cleanAllBuild', ['clean:cleanAllBuild']);
-	grunt.registerTask('buildCss', ['clean:cleanAssetsLess', 'copy:copyLess', 'less:build', 'cssmin:build']);
+	grunt.registerTask('cleanBuild', ['clean:build']);
+	grunt.registerTask('buildCss', ['clean:cleanAssetsStyles', 'copy:copyLess', 'less:build', 'concat:buildCss']);
+	// grunt distCss 之前先执行 grunt buildCss
+	grunt.registerTask('distCss', ['concat:distCss']);
+
+	grunt.registerTask('buildJs', ['uglify:build']);
+	grunt.registerTask('distJs', ['uglify:dist']);
+
+	grunt.register('dist', []);
 
 };

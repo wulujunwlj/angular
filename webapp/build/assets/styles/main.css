@@ -1,0 +1,51 @@
+/**
+ * conow-grid style
+ */
+table.conow-grid {
+  width: 500px;
+  height: 400px;
+}
+table.conow-grid tr.conow-grid-row {
+  height: 50px;
+}
+table.conow-grid tr.conow-grid-row td.conow-grid-col {
+  width: 100px;
+}
+
+/**
+ * conow-validator style
+ */
+form.conow-validator .conow-required-error {
+  border: 1px solid #FB3535;
+}
+form.conow-validator .conow-required-success {
+  border: none;
+}
+
+/**
+ * conow-grid style
+ */
+table.conow-grid {
+  width: 500px;
+  height: 400px;
+}
+table.conow-grid tr.conow-grid-row {
+  height: 50px;
+}
+table.conow-grid tr.conow-grid-row td.conow-grid-col {
+  width: 100px;
+}
+
+/**
+ * conow-validator style
+ */
+form.conow-validator .conow-required-error {
+  border: 1px solid #FB3535;
+}
+form.conow-validator .conow-required-success {
+  border: none;
+}
+
+/**
+ * staff-choose
+ */

@@ -6,9 +6,11 @@ module.exports = {
 
 	buildRootDir: 'webapp',
 
+	srcDir: 'webapp/src/app',
+
 	buildDir: 'webapp/build',
 
-	compileDir: 'webapp/bin',
+	distDir: 'webapp/dist',
 
 	appFiles: {
 		lessFiles: [
@@ -21,6 +23,7 @@ module.exports = {
 			'webapp/vendor/angular/angular.js',
 			'webapp/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
 			'webapp/vendor/angular-ui-router/release/angular-ui-router.js',
+			'webapp/vendor/angular-ui-router/release/lazyload.js',
 		],
 		cssFiles: [
 			'webapp/vendor/bootstrap/dist/css/bootstrap.css'
