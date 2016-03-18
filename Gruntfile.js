@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 				'webapp/build/assets/'
 			],
 			cleanAssetsStyles: [
-				'<%= buildDir %>/styles/'
+				'<%= buildDir %>/assets/styles/'
 			],
 			build: [
 				'<%= buildDir %>/'
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
 			dist: {
 				files: {
 					'<%= buildDir %>/src/app.min.js': ['<%= srcDir %>/app.js'],
-					'<%= buildDir %>/src/components/components.min.js': ['<%= srcDir %>/components/*.js'],
+					'<%= distDir %>/src/components/components.min.js': ['<%= srcDir %>/components/*.js'],
 				}
 			}
 		},
@@ -192,6 +192,20 @@ module.exports = function(grunt) {
 			}
 		},
 
+		jshint: {
+			all: ['Gruntfile.js', 'build.config.js', '<%= buildRootDir %>/src/**/*.js']
+		},
+
+		watch: {
+			options: {
+				//
+			},
+			copy: {
+				files: '<%= srcDir %>/components/**/*.less',
+				tasks: ['clean:cleanAssetsStyles', 'copy:copyLess', 'less:build', 'concat:buildCss']
+			}
+		},
+
 	};
 
 	grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
@@ -202,6 +216,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask( 'default' , 'This is the default task of ' + taskConfig.pkg.name + ' grunt', function() {
 		grunt.log.writeln('This is the default task of ' + taskConfig.pkg.name + ' grunt');
@@ -241,9 +257,9 @@ module.exports = function(grunt) {
 						styles: cssFiles,
 						version: grunt.config( 'pkg.version' )
 					}
-				})
+				});
 			}
-		})
+		});
 	});
 
 	// grunt.registerTask('copyVendorFiles', ['copy']);
@@ -260,9 +276,9 @@ module.exports = function(grunt) {
 	// grunt distCss 之前先执行 grunt buildCss
 	grunt.registerTask('distCss', ['concat:distCss']);
 
-	grunt.registerTask('buildJs', ['uglify:build']);
-	grunt.registerTask('distJs', ['uglify:dist']);
+	grunt.registerTask('buildJs', ['jshint:all', 'uglify:build']);
+	grunt.registerTask('distJs', ['jshint:all', 'uglify:dist']);
 
-	grunt.register('dist', []);
+	grunt.registerTask('dist', []);
 
 };

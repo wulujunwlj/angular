@@ -23,29 +23,24 @@ form.conow-validator .conow-required-success {
 }
 
 /**
- * conow-grid style
- */
-table.conow-grid {
-  width: 500px;
-  height: 400px;
-}
-table.conow-grid tr.conow-grid-row {
-  height: 50px;
-}
-table.conow-grid tr.conow-grid-row td.conow-grid-col {
-  width: 100px;
-}
-
-/**
- * conow-validator style
- */
-form.conow-validator .conow-required-error {
-  border: 1px solid #FB3535;
-}
-form.conow-validator .conow-required-success {
-  border: none;
-}
-
-/**
  * staff-choose
  */
+.staff {
+  width: 100px;
+  height: 300px;
+}
+.staff .children {
+  position: absolute;
+}
+.staff .left {
+  position: relative;
+}
+.staff .right {
+  width: 50px;
+}
+.choose {
+  background: #A12929;
+}
+.choose .left {
+  display: flex;
+}

@@ -5,76 +5,76 @@
 	<title>跳转中...</title>
 
 	<style>
-	body {
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 100%;
-		min-height: 600px;
-	}
-	.redirect-container {
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 800px;
-		min-width: 600px;
-		height: 400px;
-	}
-	.redirect-img {
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		justify-content: flex-end;
-	    flex: 1;
-	    padding-right: 30px;
-	}
-	.redirect-tip {
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		justify-content: flex-start;
-		flex-direction: column;
-		flex: 1;
-		padding-left: 30px;
-	}
-	.redirect-tip .row {
-		
-	}
-	.btn.btn-favorite {
-		font-size: 16px;
-		display: inline-block;
-		background: #23b7e5;
-		padding: 8px 5px;
-		border-radius: 6px;
-		text-align: center;
-		text-decoration: none;
-		color: #fff;
-		width: 110px;
-	}
-	.btn.btn-go {
-		font-size: 16px;
-		display: inline-block;
-		background: #45b7af;
-		padding: 8px 5px;
-		border-radius: 6px;
-		text-align: center;
-		text-decoration: none;
-		color: #fff;
-		width: 86px;
-		margin-left: 20px;
-	}
-	.tip-msg {
-		font-size: 20px;
-		color: #0f2228;
-		line-height: 1.6;
-	}
-	.redirect-btns {
-		margin-top: 60px;
-	}
+		body {
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+			min-height: 600px;
+		}
+		.redirect-container {
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 800px;
+			min-width: 600px;
+			height: 400px;
+		}
+		.redirect-img {
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			justify-content: flex-end;
+		    flex: 1;
+		    padding-right: 30px;
+		}
+		.redirect-tip {
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			justify-content: flex-start;
+			flex-direction: column;
+			flex: 1;
+			padding-left: 30px;
+		}
+		.redirect-tip .row {
+			
+		}
+		.btn.btn-favorite {
+			font-size: 16px;
+			display: inline-block;
+			background: #23b7e5;
+			padding: 8px 5px;
+			border-radius: 6px;
+			text-align: center;
+			text-decoration: none;
+			color: #fff;
+			width: 110px;
+		}
+		.btn.btn-go {
+			font-size: 16px;
+			display: inline-block;
+			background: #45b7af;
+			padding: 8px 5px;
+			border-radius: 6px;
+			text-align: center;
+			text-decoration: none;
+			color: #fff;
+			width: 86px;
+			margin-left: 20px;
+		}
+		.tip-msg {
+			font-size: 20px;
+			color: #0f2228;
+			line-height: 1.6;
+		}
+		.redirect-btns {
+			margin-top: 60px;
+		}
 	</style>
 </head>
 
@@ -82,7 +82,7 @@
 
 	<div class="redirect-container">
 		<div class="redirect-img">
-			<img src="images/jump.png" alt="跳转中...">
+			<img src="./jump.png" alt="跳转中...">
 		</div>
 		<div class="redirect-tip">
 			<div class="row tip-msg">
@@ -92,8 +92,8 @@
 				正在为您自动跳转<span id="dot-dot-dot">.</span>	
 			</div>
 			<div class="row redirect-btns">
-				<a href="http://159.226.97.164" id="btn-favorite" class="btn btn-favorite">收藏最新地址</a>
-				<a href="http://159.226.97.164" class="btn btn-go">直接跳转</a>
+				<a href="" id="btn-favorite" class="btn btn-favorite">收藏最新地址</a>
+				<a href="" id="btn-go" class="btn btn-go">直接跳转</a>
 			</div>
 		</div>
 	</div>
@@ -107,6 +107,7 @@
 
 			window.onload = function() {
 				var addFavorite = document.getElementById('btn-favorite'),
+					btnGo = document.getElementById('btn-go'),
 					dotDotDot = document.getElementById('dot-dot-dot'),
 					secondsCount = 5,
 					dotCount = 0;
@@ -118,11 +119,13 @@
 					addFavoriteFn(this, destUrl, title, evt); 
 				});
 
+				addFavorite.setAttribute('href', destUrl);
+				btnGo.setAttribute('href', destUrl);
+
 				function setTime(count) {
 					if (count < 0) {
-						window.location.href = 'http://159.226.97.164';
+						window.location.href = destUrl;
 					} else {
-						// countDownSeconds.innerHTML = count;
 						count --;
 
 						secondTimeoutHandler = setTimeout(function() {
@@ -167,38 +170,6 @@
 				    }
 				}
 			}
-
-			function add2(obj, url, title) {
-			    var e = window.event || arguments.callee.caller.arguments[0];
-			    var B = {
-			        IE : /MSIE/.test(window.navigator.userAgent) && !window.opera
-			        , FF : /Firefox/.test(window.navigator.userAgent)
-			        , OP : !!window.opera
-			    };
-			    obj.onmousedown = null;
-			    if (B.IE) {
-			        obj.attachEvent("onmouseup", function () {
-			            try {
-			                window.external.AddFavorite(url, title);
-			                window.event.returnValue = false;
-			            } catch (exp) {
-			            	// 
-			            }
-			        });
-			    } else {
-			        if (B.FF || obj.nodeName.toLowerCase() == "a") {
-			            obj.setAttribute("rel", "sidebar");
-			            obj.title = title;
-			            obj.href = url;
-			        } else if (B.OP) {
-			            var a = document.createElement("a");
-			            a.rel = "sidebar", a.title = title, a.href = url;
-			            obj.parentNode.insertBefore(a, obj);
-			            a.appendChild(obj);
-			            a = null;
-			        }
-			    }
-			};
 
 			window.onbeforeunload = function() {
 				clearTimeout(secondTimeoutHandler);
