@@ -8,6 +8,10 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('./package.json'),
 
 		concat: {
+			options: {
+				banner: '/* <%= grunt.template.today("yyyy-mm-dd") %>*/\n',
+				separator: ';\n'
+			},
 			buildCss: {
 				src: ['<%= buildDir %>/assets/styles/*.css', '!<%= buildDir %>/assets/styles/*.min.css'],
 				dest: '<%= buildDir %>/assets/styles/main.css',
@@ -20,8 +24,15 @@ module.exports = function(grunt) {
 				// 
 			},
 			components: {
-				src: ['<%= componentDir %>/*.js', '!<%= componentDir %>/*.spec.js'],
-				dest: 'webapp/build/test/<%= componentName %>.js',
+				files: [{
+					expand: true,
+					cwd: 'webapp/src/app/components/',
+					src: ['**/*.js', '!**/*.spec.js'],
+					dest: 'webapp/build/src/',
+					ext: '.js',
+					extDoc: 'first'
+				}],
+
 			},
 		},
 
@@ -29,15 +40,15 @@ module.exports = function(grunt) {
 
 	grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
 
-	// grunt.loadNpmTasks('grunt-contrib-uglify');
-	// grunt.loadNpmTasks('grunt-contrib-copy');
-	// grunt.loadNpmTasks('grunt-contrib-concat');
-	// grunt.loadNpmTasks('grunt-contrib-clean');
-	// grunt.loadNpmTasks('grunt-contrib-less');
-	// grunt.loadNpmTasks('grunt-contrib-cssmin');
-	// grunt.loadNpmTasks('grunt-contrib-jshint');
-	// grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('load-grunt-tasks');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-watch');
+	// grunt.loadNpmTasks('load-grunt-tasks');
 
 	grunt.registerTask( 'default' , 'This is the default task of ' + taskConfig.pkg.name + ' grunt', function() {
 		grunt.log.writeln('This is the default task of ' + taskConfig.pkg.name + ' grunt');
@@ -45,14 +56,13 @@ module.exports = function(grunt) {
 		// grunt.log.writeln(grunt.config()['pkg']['name']);
 	});
 
-	// 读取 components 目录，获取其中的组件结构(每个组件对应生成一个文件)
-	grunt.registerTask('readDir', 'Read Directory', function() {
-		var rootDir = 'webapp/src';
+	/**
+	 * 读取文件目录下的所有子目录
+	 * @param  {[type]} rootDir [description]
+	 * @return {[type]}         [description]
+	 */
+	function readDir(rootDir) {
 		var dirList = [];		// 保存动态读取的目录
-		var componentName = '';
-		var componentDir = '';
-		var dir = '';
-		var obj = {};
 
 		(function walk(path) {
 			var items = fs.readdirSync(path);
@@ -63,8 +73,21 @@ module.exports = function(grunt) {
 					walk(path + '/' + item);
 				}
 			});
+		})(rootDir);
 
-		})('webapp/src/app/components');
+		return dirList;
+	}
+
+	// 读取 components 目录，获取其中的组件结构(每个组件对应生成一个文件)
+	grunt.registerTask('concatComponents', 'Read Directory', function() {
+		var rootDir = 'webapp/src';
+		var dirList = [];
+		var componentName = '';
+		var componentDir = '';
+		var dir = '';
+		var obj = {};
+
+		dirList = readDir(rootDir);
 
 		for (var i = 0; i < dirList.length; i++) {
 			dir = dirList[i];
@@ -74,14 +97,56 @@ module.exports = function(grunt) {
 
 			grunt.config.componentDir = componentDir;
 			grunt.config.componentName = componentName;
+
 			grunt.task.run('concat:components');
 		}
 
-		// grunt.config.component = 'webapp/src/app/components/conow-grid';
-		// grunt.task.run('uglify:components');
-		
-		// grunt.file.write('webapp/src/dirList.json', JSON.stringify(obj));
-		// userConfig.componentsObj = obj;
 	});
+
+	/**
+	 * initComponent
+	 * @param 组件名称
+	 * @param [组件根目录]:默认是 webapp/src/app/components/
+	 * 
+	 *
+	 * description:运行命令 grunt initComponent:conow-tab将会在 webapp/src/app/components/ 目录下生成对应的组件初始化结构，
+	 * 	可以通过 filesSuffixArr, dirArr 配置生成的文件后缀和路径 
+	 */
+	grunt.registerTask('initComponent', 'Initialization a component directory', 
+		function init() {
+			var filesSuffixArr = ['.directive.js', '.service.js', '.filter.js', '.less', '.tpl.html'],
+					dirArr = ['demo'],
+					rootDir = 'webapp/src/app/components/',
+					iLen = 0;
+
+			if (arguments.length === 0) {
+				grunt.log.writeln('请输入组件名称');
+
+				return false;
+			} else {
+				if (arguments.length > 1) {
+					rootDir = arguments[1];
+				}
+				grunt.log.writeln('组件初始化中...');
+				rootDir += arguments[0];
+
+				// 生成配置文件
+				iLen = filesSuffixArr.length;
+				for (var i = 0; i < iLen; i++) {
+					grunt.file.write(rootDir + '/' + arguments[0] + filesSuffixArr[i]);
+				}
+
+				// 生成配置目录
+				iLen = dirArr.length;
+				for (var i = 0; i < iLen; i++) {
+					grunt.file.mkdir(rootDir + '/' + dirArr[i]);
+				}
+
+				grunt.log.writeln('组件初始化成功！');
+
+				return true;
+			}
+		}
+	);
 
 };

@@ -1,1 +1,0 @@
-!function(a){"use strict";a.module("components",[])}(angular);

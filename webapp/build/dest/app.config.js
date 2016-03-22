@@ -1,1 +1,0 @@
-!function(a){"use strict";a.module("app").run(["$rootScope","$state","$stateParams",function(a,b,c){}])}(angular);
