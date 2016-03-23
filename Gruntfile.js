@@ -9,11 +9,24 @@ module.exports = function(grunt) {
 
 		clean: {
 			buildAll: {
-				src: '<%= buildDir %>'
+				src: '<%= rootDir %>/<%= buildDir %>'
 			},
 			distAll: {
-				src: '<%= distDir %>'
+				src: '<%= rootDir %>/<%= distDir %>'
 			},
+		},
+
+		uglify: {
+			options: {},
+			// buildJs: {
+			// 	files: [{
+			// 		expand: true,
+			// 		cwd: '<%= rootDir %>/<%= buildDir %>/src',
+			// 		src: ['**/*.js', '!**/*.min.js'],
+			// 		dest: '<%= rootDir %>/<%= buildDir %>/src',
+			// 		ext: '.min.js'
+			// 	}]
+			// }
 		},
 
 		concat: {
@@ -22,12 +35,12 @@ module.exports = function(grunt) {
 				separator: ';\n'
 			},
 			buildCss: {
-				src: ['<%= buildDir %>/assets/styles/*.css', '!<%= buildDir %>/assets/styles/*.min.css'],
-				dest: '<%= buildDir %>/assets/styles/main.css',
+				src: ['<%= rootDir %>/<%= buildDir %>/assets/styles/*.css', '!<%= rootDir %>/<%= buildDir %>/assets/styles/*.min.css'],
+				dest: '<%= rootDir %>/<%= buildDir %>/assets/styles/main.css',
 			},
 			distCss: {
-				src: ['!<%= buildDir %>/assets/styles/*.css', '<%= buildDir %>/assets/styles/*.min.css'],
-				dest: '<%= distDir %>/assets/styles/main.min.css',
+				src: ['!<%= rootDir %>/<%= buildDir %>/assets/styles/*.css', '<%= rootDir %>/<%= buildDir %>/assets/styles/*.min.css'],
+				dest: '<%= rootDir %>/<%= distDir %>/assets/styles/main.min.css',
 			},
 			buildJs: {
 				// 
@@ -35,9 +48,9 @@ module.exports = function(grunt) {
 			components: {
 				files: [{
 					expand: true,
-					cwd: 'webapp/src/app/',
+					cwd: '<%= rootDir %>/<%= srcDir %>',
 					src: ['**/*.js', '!**/*.spec.js'],
-					dest: 'webapp/build/src/',
+					dest: '<%= rootDir %>/<%= buildDir %>/src/',
 					ext: '.js',
 					extDoc: 'first'
 				}],
@@ -50,26 +63,62 @@ module.exports = function(grunt) {
 			less: {
 				files: [{
 					expand: true,
-					cwd: 'webapp/src/app/',
+					cwd: '<%= rootDir %>/<%= srcDir %>',
 					src: ['**/*.less'],
-					dest: 'webapp/build/less/',
+					dest: '<%= rootDir %>/<%= buildDir %>/less',
 					flatten: true
 				}]
-			}
+			},
 		},
 
 		less: {
 			options: {},
 			build: {
 				files: {
-					'<%= buildDir %>/styles/components.css': ['<%= buildDir %>/less/*.less'],
+					'<%= rootDir %>/<%= buildDir %>/styles/components.css': ['<%= rootDir %>/<%= buildDir %>/less/*.less'],
 				}
 			},
 		},
 
+		cssmin: {
+			options: {},
+			// build: [{
+			// 	expand: true,
+			// 	cwd: 'webapp/build/styles',
+			// 	src: ['components.css'],
+			// 	dest: 'webapp/build/styles',
+			// 	ext: '.min.css'
+			// }]
+			build: {
+				files: {
+					'<%= rootDir %>/<%= buildDir %>/styles/components.min.css': ['<%= rootDir %>/<%= buildDir %>/styles/**.css', '!<%= rootDir %>/<%= buildDir %>/styles/**.min.css'],
+				}
+			}
+		},
+
 		watch: {
 			options: {},
-			files: ['<%= buildRootDir %>/**/*.js', '<%= buildRootDir %>/**/*.less'],
+			configFiles: {
+				options: {
+					reload: true
+				},
+				files: ['Gruntfile.js', 'build.config.js']
+			},
+
+			buildCss: {
+				files: ['<%= rootDir %>/<%= srcDir %>/**/*.less'],
+				tasks: ['copy:less', 'less:build', 'cssmin'],
+			},
+
+			uglifyCss: {
+				files: ['<%= rootDir %>/<%= buildDir %>/styles/*.css'],
+				tasks: ['cssmin:build'],
+			},
+
+			buildJs: {
+				files: ['<%= rootDir %>/<%= srcDir %>/**/*.js', '!<%= rootDir %>/<%= srcDir %>/**/*.spec.js'],
+				tasks: ['concat:components'],
+			},
 		},
 
 	};
@@ -98,53 +147,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('cleanBuildAll', 'Clean the build directory.', ['clean:buildAll']);
 
 	/**
-	 * 读取文件目录下的所有子目录
-	 * @param  {[type]} rootDir [description]
-	 * @return {[type]}         [description]
-	 */
-	function readDir(rootDir) {
-		var dirList = []; // 保存动态读取的目录
-
-		(function walk(path) {
-			var items = fs.readdirSync(path);
-
-			items.forEach(function(item) {
-				if (fs.statSync(path + '/' + item).isDirectory()) {
-					dirList.push(path + '/' + item);
-					walk(path + '/' + item);
-				}
-			});
-		})(rootDir);
-
-		return dirList;
-	}
-
-	/**
-	 * 读取 components 目录，获取其中的组件结构(每个组件对应生成一个文件)
-	 */
-	grunt.registerTask('concatComponents', 'Concat components files.', function() {
-		var rootDir = 'webapp/src';
-		var dirList = [];
-		var componentName = '';
-		var componentDir = '';
-		var dir = '';
-
-		dirList = readDir(rootDir);
-		console.log('dirList:', dirList);
-		for (var i = 0; i < dirList.length; i++) {
-			dir = dirList[i];
-			componentName = dir.substring(dir.lastIndexOf('/') + 1);
-			componentDir = dir;
-
-			grunt.config.componentDir = componentDir;
-			grunt.config.componentName = componentName;
-
-			grunt.task.run('concat:components');
-		}
-
-	});
-
-	/**
 	 * initComponent
 	 * @param 组件名称
 	 * @param [组件根目录]:默认是 webapp/src/app/components/
@@ -157,7 +159,7 @@ module.exports = function(grunt) {
 		function init() {
 			var filesSuffixArr = ['.directive.js', '.service.js', '.filter.js', '.less', '.tpl.html'],
 				dirArr = ['demo'],
-				rootDir = 'webapp/src/app/components/',
+				rootDir = grunt.config('rootDir') + '/' + grunt.config('srcDir') + '/components/',
 				iLen = 0;
 
 			if (arguments.length === 0) {
@@ -190,15 +192,73 @@ module.exports = function(grunt) {
 		}
 	);
 
+	/**
+	 * 读取文件目录下的所有子目录
+	 * @param  {[type]} rootDir [description]
+	 * @return {[type]}         [description]
+	 */
+	function readDir(rootDir) {
+		var dirList = []; // 保存动态读取的目录
+
+		(function walk(path) {
+			var items = fs.readdirSync(path);
+
+			items.forEach(function(item) {
+				if (fs.statSync(path + '/' + item).isDirectory()) {
+					dirList.push(path + '/' + item);
+					walk(path + '/' + item);
+				}
+			});
+		})(rootDir);
+
+		return dirList;
+	}
+
+	/**
+	 * 读取 components 目录，获取其中的组件结构(每个组件对应生成一个文件)
+	 */
+	grunt.registerTask('concatComponents', 'Concat components files.', function() {
+		var rootDir = grunt.config('rootDir') + '/src';
+		var dirList = [];
+		var componentName = '';
+		var componentDir = '';
+		var dir = '';
+
+		dirList = readDir(rootDir);
+		for (var i = 0; i < dirList.length; i++) {
+			dir = dirList[i];
+			componentName = dir.substring(dir.lastIndexOf('/') + 1);
+			componentDir = dir;
+
+			grunt.config.componentDir = componentDir;
+			grunt.config.componentName = componentName;
+
+			grunt.task.run('concat:components');
+			// grunt.task.run('uglify:buildJs');
+		}
+
+	});
+
 	// grunt.registerTask('copyLess', 'Copy less files to build directory.', ['copy:less']);
 
 	grunt.registerTask('buildLess', 'Copy and build less to styles.', ['copy:less', 'less:build']);
 
-	grunt.event.on('watch', function(action, filepath) {
-		console.log('action:', action);
-		console.log('filepath:', filepath);
+	grunt.event.on('watch', function(action, filepath, target) {
+		console.log('Watching is running...')
+		// console.log(target);
 
 		grunt.task.run('concatComponents');
+		// grunt.task.run('uglify:buildJs');
+
 	});
+
+	// grunt.registerTask('buildAuto', 'Watching build files and auto build.', ['watch:buildCss']);
+
+	grunt.registerTask('test', 'This is a task for testing.', 
+		function() {
+			grunt.log.writeln(grunt.config('rootDir'));
+			grunt.log.writeln(grunt.config('srcDir'));
+		}
+	);
 
 };
