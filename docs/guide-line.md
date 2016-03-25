@@ -13,3 +13,7 @@ conow-components 操作指南
 
 ## cautions
 * 注意刷新 eclipse 的文件结构
+
+## 关于本地 `node_modules` 的使用
+* npm-g 中的文件拷贝到服务器: `C:\Users\your_name\AppData\Roaming\npm` 下
+* npm 中的文件拷贝到服务器：`D:\work\javawork\conow-pub\src\main\webapp\UEDV2` 下

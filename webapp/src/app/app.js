@@ -16,14 +16,36 @@
 			],
 			isDebug: false,
 			isLoadModulesEvents: false,
+			headerNavSrc: 'src/app/common/header-nav.html',
+			leftNavSrc: 'src/app/common/left-nav.html'
 		})
 		.run(['$rootScope', '$window', '$log', 
 			function($rootScope, $window, $log) {
 				// 
 			}
 		])
-		.controller('appCtrl', ['$scope', function($scope) {
-			var vm = this;
-			vm.title = 'app title';
-		}]);
+		.controller('appCtrl', ['$scope', 'app', 'appConfig',
+			function($scope, app, appConfig) {
+				var vm = this;
+				vm.title = app.name;
+
+				vm.headerNavSrc = appConfig.headerNavSrc;
+				vm.leftNavSrc = appConfig.leftNavSrc;
+			}
+		])
+		.controller('leftNavCtrl', ['$scope', '$http', 
+			function($scope, $http) {
+				var vm = this;
+
+				$http
+					.get('services/getComponentsList')
+					.then(function(res) {
+						console.log(res);
+
+						vm.navList = res.data;
+					}, function(msg) {
+						console.error(msg);
+					});
+			}
+		]);
 }(angular));

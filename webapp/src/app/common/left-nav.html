@@ -1,0 +1,6 @@
+
+<div ng-controller="leftNavCtrl as leftNav">
+	<ul class="fn-list list-group">
+		<li class="list-group-item" ng-repeat="nav in leftNav.navList track by $index" ng-bind=":: nav.title"></li>
+	</ul>
+</div>

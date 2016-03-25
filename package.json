@@ -39,6 +39,8 @@
     "grunt-html2js": "^0.3.5",
     "grunt-ng-annotate": "^2.0.1",
     "grunt-usemin": "^3.1.1",
+    "karma": "^0.13.22",
+    "karma-junit-reporter": "^0.4.1",
     "load-grunt-tasks": "^3.4.1"
   },
   "gruntConfig": {

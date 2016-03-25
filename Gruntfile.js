@@ -78,6 +78,12 @@ module.exports = function(grunt) {
 					'<%= rootDir %>/<%= buildDir %>/styles/components.css': ['<%= rootDir %>/<%= buildDir %>/less/*.less'],
 				}
 			},
+
+			bizLess: {
+				files: {
+					'<%= rootDir %>/<%= srcDir %>/common/common.css': ['<%= rootDir %>/<%= srcDir %>/common/*.less'],
+				}
+			}
 		},
 
 		cssmin: {
@@ -119,6 +125,11 @@ module.exports = function(grunt) {
 				files: ['<%= rootDir %>/<%= srcDir %>/**/*.js', '!<%= rootDir %>/<%= srcDir %>/**/*.spec.js'],
 				tasks: ['concat:components'],
 			},
+
+			bizLess: {
+				files: ['<%= rootDir %>/<%= srcDir %>/common/*.less'],
+				tasks: ['less:bizLess']
+			}
 		},
 
 	};
