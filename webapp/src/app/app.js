@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('app', ['ui.router', 'oc.lazyLoad'])
+		.module('app', ['ui.router', 'oc.lazyLoad', 'core'])
 		.constant('app', {
 			name: 'angular-components',
 			version: '0.0.1'
@@ -46,6 +46,14 @@
 					}, function(msg) {
 						console.error(msg);
 					});
+			}
+		])
+		.controller('homeCtrl', ['$scope', 
+			function ($scope) {
+				var vm = this;
+				vm.login = loginFn();
+
+				function loginFn() {}
 			}
 		]);
 }(angular));

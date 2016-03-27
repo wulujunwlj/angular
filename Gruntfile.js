@@ -170,7 +170,8 @@ module.exports = function(grunt) {
 		function init() {
 			var filesSuffixArr = ['.directive.js', '.service.js', '.filter.js', '.less', '.tpl.html'],
 				dirArr = ['demo'],
-				rootDir = grunt.config('rootDir') + '/' + grunt.config('srcDir') + '/components/',
+				rootDir = grunt.config('rootDir') + '/' + grunt.config('srcDir'),
+
 				iLen = 0;
 
 			if (arguments.length === 0) {
@@ -179,10 +180,12 @@ module.exports = function(grunt) {
 				return false;
 			} else {
 				if (arguments.length > 1) {
-					rootDir = arguments[1];
+					rootDir += '/' + arguments[1] + '/' + arguments[0];
+				} else {
+					rootDir += '/components/' + arguments[0];
 				}
+				grunt.log.writeln('组件路径：', rootDir);
 				grunt.log.writeln('组件初始化中...');
-				rootDir += arguments[0];
 
 				// 生成配置文件
 				iLen = filesSuffixArr.length;

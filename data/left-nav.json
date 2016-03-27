@@ -1,0 +1,37 @@
+{
+	"leftNav": {
+		"Angular": [
+			{
+				"name": "Bootstrap 中文网",
+				"url": "http://www.bootcss.com/"
+			}
+		],
+		"bootstrap": [
+			{
+				"name": "Bootstrap 中文网",
+				"url": "http://www.bootcss.com/"
+			}
+		],
+		"electron": [
+			{
+				"name": "使用 Electron 构建桌面应用",
+				"url": "http://zhuanlan.zhihu.com/FrontendMagazine/20225295"
+			}
+		],
+		"blogs": [
+			{
+				"name": "CSS边框盒子模型详解",
+				"url": "http://www.codeceo.com/article/css-border-box.html"
+			}, {
+				"name": "前端文本截断",
+				"url": "http://web.jobbole.com/85412/"
+			}, {
+				"name": "一个前端的自我修养",
+				"url": "http://web.jobbole.com/85426/"
+			}, {
+				"name": "非常不错带JS表单验证功能的注册页面模板",
+				"url": "http://www.js-css.cn/a/css/template/reglogin/2014/0722/1274.html"
+			},
+		]
+	}
+}

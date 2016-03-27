@@ -15,6 +15,10 @@ router.get('/getComponentsList', function(req, res) {
   			name: 'angular-form-for',
   			title: '表单验证',
   			link: '/app/formFor'
+  		}, {
+  			name: 'expanders',
+  			title: '展开/折叠',
+  			link: '/app/formFor'
   		}
   	]);
 });
