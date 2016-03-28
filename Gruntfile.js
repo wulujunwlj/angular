@@ -8,6 +8,9 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('./package.json'),
 
 		clean: {
+			buildJs: {
+				src: '<%= rootDir %>/<%= buildDir %>/src'
+			},
 			buildAll: {
 				src: '<%= rootDir %>/<%= buildDir %>'
 			},
@@ -45,11 +48,21 @@ module.exports = function(grunt) {
 			buildJs: {
 				// 
 			},
+			modules: {
+				files: [{
+					expand: true,
+					cwd: '<%= rootDir %>/<%= srcDir %>',
+					src: ['**/*.module.js', '**/*.config.js', '**/*.config.lazyload.js', '**/*.routes.js'],
+					ext: '.js',
+					extDoc: 'first'
+				}]
+			},
 			components: {
 				files: [{
 					expand: true,
 					cwd: '<%= rootDir %>/<%= srcDir %>',
-					src: ['**/*.js', '!**/*.spec.js'],
+					// src: ['**/*.js', '!**/*.spec.js'],
+					src: ['**/*.directive.js', '**/*.service.js', '**/*.filter.js'],
 					dest: '<%= rootDir %>/<%= buildDir %>/src/',
 					ext: '.js',
 					extDoc: 'first'
@@ -129,6 +142,21 @@ module.exports = function(grunt) {
 			bizLess: {
 				files: ['<%= rootDir %>/<%= srcDir %>/common/*.less'],
 				tasks: ['less:bizLess']
+			},
+
+			// 开发时的 watch 方法，包括 Gruntfile 配置文件、less编译、js合并
+			develop: {
+				options: {
+					reload: true,
+				},
+				files: [
+					'Gruntfile.js', 
+					'build.config.js', 
+					'<%= rootDir %>/<%= srcDir %>/**/*.less',
+					'<%= rootDir %>/<%= buildDir %>/styles/*.css',
+					'<%= rootDir %>/<%= srcDir %>/**/*.js',
+					'!<%= rootDir %>/<%= srcDir %>/**/*.spec.js'
+				]
 			}
 		},
 
@@ -248,6 +276,7 @@ module.exports = function(grunt) {
 			grunt.config.componentName = componentName;
 
 			grunt.task.run('concat:components');
+			grunt.task.run('concat:modules');
 			// grunt.task.run('uglify:buildJs');
 		}
 
@@ -259,10 +288,29 @@ module.exports = function(grunt) {
 
 	grunt.event.on('watch', function(action, filepath, target) {
 		console.log('Watching is running...')
-		// console.log(target);
 
-		grunt.task.run('concatComponents');
+		// grunt.task.run('clean:buildJs');
+		// grunt.task.run('concatComponents');
 		// grunt.task.run('uglify:buildJs');
+		console.log(action)
+		console.log(filepath)
+		console.log(target)
+		var buildSrc = grunt.config('rootDir') + grunt.config('srcDir');
+		// src files
+		if (filepath.indexOf(buildSrc) > -1) {
+			if (filepath.indexOf('.less') > -1) {
+				// run less task
+				grunt.task.run('less:build');
+				grunt.task.run('cssmin:build');
+			} else if (filepath.indexOf('.js') > -1) {
+				// run js task
+				grunt.task.run('concatComponents');
+			}
+		} 
+		// other files
+		else {
+			// 
+		}
 
 	});
 
@@ -274,5 +322,7 @@ module.exports = function(grunt) {
 			grunt.log.writeln(grunt.config('srcDir'));
 		}
 	);
+
+	// grunt.registerTask('develop', 'Task for developing.', ['watch:configFiles', 'watch:buildJs']);
 
 };
