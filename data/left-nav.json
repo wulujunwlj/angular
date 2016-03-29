@@ -4,6 +4,11 @@
 			{
 				"name": "Bootstrap 中文网",
 				"url": "http://www.bootcss.com/"
+			}, 
+			{
+				"name": "unkonwn provider",
+				"tags": ["bug", "provider", "Angular"],
+				"url": "http://zpalexander.com/blog/debug-unknown-provider-minified-angularjs/"
 			}
 		],
 		"bootstrap": [

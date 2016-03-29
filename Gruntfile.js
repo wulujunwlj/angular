@@ -17,6 +17,12 @@ module.exports = function(grunt) {
 			distAll: {
 				src: '<%= rootDir %>/<%= distDir %>'
 			},
+			css: {
+				src: ['<%= rootDir %>/<%= buildDir %>/less', '<%= rootDir %>/<%= buildDir %>/styles']
+			},
+			js: {
+				src: ['<%= rootDir %>/<%= buildDir %>/src']
+			}
 		},
 
 		uglify: {
@@ -38,12 +44,12 @@ module.exports = function(grunt) {
 				separator: ';\n'
 			},
 			buildCss: {
-				src: ['<%= rootDir %>/<%= buildDir %>/assets/styles/*.css', '!<%= rootDir %>/<%= buildDir %>/assets/styles/*.min.css'],
-				dest: '<%= rootDir %>/<%= buildDir %>/assets/styles/main.css',
+				src: ['!<%= rootDir %>/<%= buildDir %>/styles/app.css', '<%= rootDir %>/<%= buildDir %>/styles/**/*.css', '!<%= rootDir %>/<%= buildDir %>/styles/**/*.min.css'],
+				dest: '<%= rootDir %>/<%= buildDir %>/styles/app.css',
 			},
 			distCss: {
-				src: ['!<%= rootDir %>/<%= buildDir %>/assets/styles/*.css', '<%= rootDir %>/<%= buildDir %>/assets/styles/*.min.css'],
-				dest: '<%= rootDir %>/<%= distDir %>/assets/styles/main.min.css',
+				src: ['!<%= rootDir %>/<%= buildDir %>/styles/*.css', '<%= rootDir %>/<%= buildDir %>/styles/*.min.css'],
+				dest: '<%= rootDir %>/<%= distDir %>/styles/main.min.css',
 			},
 			buildJs: {
 				// 
@@ -53,6 +59,7 @@ module.exports = function(grunt) {
 					expand: true,
 					cwd: '<%= rootDir %>/<%= srcDir %>',
 					src: ['**/*.module.js', '**/*.config.js', '**/*.config.lazyload.js', '**/*.routes.js'],
+					dest: '<%= rootDir %>/<%= buildDir %>/src',
 					ext: '.js',
 					extDoc: 'first'
 				}]
@@ -79,7 +86,7 @@ module.exports = function(grunt) {
 					cwd: '<%= rootDir %>/<%= srcDir %>',
 					src: ['**/*.less'],
 					dest: '<%= rootDir %>/<%= buildDir %>/less',
-					flatten: true
+					// flatten: true
 				}]
 			},
 		},
@@ -87,9 +94,16 @@ module.exports = function(grunt) {
 		less: {
 			options: {},
 			build: {
-				files: {
-					'<%= rootDir %>/<%= buildDir %>/styles/components.css': ['<%= rootDir %>/<%= buildDir %>/less/*.less'],
-				}
+				// files: {
+				// 	'<%= rootDir %>/<%= buildDir %>/styles/components.css': ['<%= rootDir %>/<%= buildDir %>/less/*.less'],
+				// },
+				files: [{
+					expand: true,
+					cwd: '<%= rootDir %>/<%= buildDir %>/less',
+					src: ['**/*.less'],
+					dest: '<%= rootDir %>/<%= buildDir %>/styles',
+					ext: '.css'
+				}]
 			},
 
 			bizLess: {
@@ -110,7 +124,7 @@ module.exports = function(grunt) {
 			// }]
 			build: {
 				files: {
-					'<%= rootDir %>/<%= buildDir %>/styles/components.min.css': ['<%= rootDir %>/<%= buildDir %>/styles/**.css', '!<%= rootDir %>/<%= buildDir %>/styles/**.min.css'],
+					'<%= rootDir %>/<%= buildDir %>/styles/app.min.css': ['<%= rootDir %>/<%= buildDir %>/styles/**.css', '!<%= rootDir %>/<%= buildDir %>/styles/**.min.css'],
 				}
 			}
 		},
@@ -154,6 +168,8 @@ module.exports = function(grunt) {
 					'build.config.js', 
 					'<%= rootDir %>/<%= srcDir %>/**/*.less',
 					'<%= rootDir %>/<%= buildDir %>/styles/*.css',
+					'!<%= rootDir %>/<%= buildDir %>/styles/app.css',
+					'!<%= rootDir %>/<%= buildDir %>/styles/app.min.css',
 					'<%= rootDir %>/<%= srcDir %>/**/*.js',
 					'!<%= rootDir %>/<%= srcDir %>/**/*.spec.js'
 				]
@@ -193,6 +209,8 @@ module.exports = function(grunt) {
 	 *
 	 * description:运行命令 grunt initComponent:conow-tab将会在 webapp/src/app/components/ 目录下生成对应的组件初始化结构，
 	 * 	可以通过 filesSuffixArr, dirArr 配置生成的文件后缀和路径 
+	 *
+	 * @ 第二个参数可以指定在app下的哪个目录初始化指令(默认是在 components)
 	 */
 	grunt.registerTask('initComponent', 'Initialization a component directory.',
 		function init() {
@@ -267,6 +285,7 @@ module.exports = function(grunt) {
 		var dir = '';
 
 		dirList = readDir(rootDir);
+grunt.log.writeln('dirList:', dirList);
 		for (var i = 0; i < dirList.length; i++) {
 			dir = dirList[i];
 			componentName = dir.substring(dir.lastIndexOf('/') + 1);
@@ -275,8 +294,8 @@ module.exports = function(grunt) {
 			grunt.config.componentDir = componentDir;
 			grunt.config.componentName = componentName;
 
-			grunt.task.run('concat:components');
 			grunt.task.run('concat:modules');
+			grunt.task.run('concat:components');
 			// grunt.task.run('uglify:buildJs');
 		}
 
@@ -286,29 +305,45 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('buildLess', 'Copy and build less to styles.', ['copy:less', 'less:build']);
 
+	/**
+	 * grunt watch develop 运行任务，监控 less 和 js 文件变化
+	 */
 	grunt.event.on('watch', function(action, filepath, target) {
 		console.log('Watching is running...')
+		var buildSrc = grunt.config('rootDir') + '/' + grunt.config('srcDir');
+		// 处理不同系统的路径分隔符不一致
+		buildSrc = buildSrc.replace(/\//g, '\\');	
+		filepath = filepath.replace(/\//g, '\\');
 
 		// grunt.task.run('clean:buildJs');
 		// grunt.task.run('concatComponents');
 		// grunt.task.run('uglify:buildJs');
-		console.log(action)
-		console.log(filepath)
-		console.log(target)
-		var buildSrc = grunt.config('rootDir') + grunt.config('srcDir');
+		
 		// src files
 		if (filepath.indexOf(buildSrc) > -1) {
 			if (filepath.indexOf('.less') > -1) {
+grunt.log.writeln('less');
 				// run less task
-				grunt.task.run('less:build');
-				grunt.task.run('cssmin:build');
+				grunt.task.run(['clean:css', 'copy:less', 'less:build', 'concat:buildCss', 'cssmin:build']);
+
+				// grunt.task.run('clean:css');
+
+				// grunt.task.run('copy:less');
+				// grunt.task.run('less:build');
+				// grunt.task.run('concat:buildCss');
+				// grunt.task.run('cssmin:build');
 			} else if (filepath.indexOf('.js') > -1) {
+grunt.log.writeln('js');
 				// run js task
-				grunt.task.run('concatComponents');
+				grunt.task.run(['clean:js', 'concatComponents']);
+
+				// grunt.task.run('clean:js');
+				// grunt.task.run('concatComponents');
 			}
 		} 
 		// other files
 		else {
+grunt.log.writeln('others');
 			// 
 		}
 
