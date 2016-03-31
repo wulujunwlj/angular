@@ -4,5 +4,5 @@
 (function(angular) {
 	'use strict';
 
-	angular.module('components', []);
+	angular.module('components', ['ui.router']);
 })(angular);

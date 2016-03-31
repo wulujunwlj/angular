@@ -1,0 +1,13 @@
+
+<div>
+	<table ng-table="vm.tableParams" class="table" show-filter="true">
+		<tr ng-repeat="user in $data">
+			<td title="'name'" filter="{ name: 'text' }" sortable="'name'">
+				{{ user.name }}
+			</td>
+			<td title="'age'" filter="{ age: 'number' }" sortable="'name'">
+				{{ user.age }}
+			</td>
+		</tr>
+	</table>
+</div>

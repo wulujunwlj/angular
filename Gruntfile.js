@@ -54,6 +54,14 @@ module.exports = function(grunt) {
 			buildJs: {
 				// 
 			},
+			module: {
+				files: [{
+					expand: true,
+					cwd: 'filePath',
+					src: ['*.js', '!*.js'],
+					dest: ''
+				}]
+			},
 			modules: {
 				files: [{
 					expand: true,
@@ -167,9 +175,9 @@ module.exports = function(grunt) {
 					'Gruntfile.js', 
 					'build.config.js', 
 					'<%= rootDir %>/<%= srcDir %>/**/*.less',
-					'<%= rootDir %>/<%= buildDir %>/styles/*.css',
-					'!<%= rootDir %>/<%= buildDir %>/styles/app.css',
-					'!<%= rootDir %>/<%= buildDir %>/styles/app.min.css',
+					// '<%= rootDir %>/<%= buildDir %>/styles/*.css',
+					// '!<%= rootDir %>/<%= buildDir %>/styles/app.css',
+					// '!<%= rootDir %>/<%= buildDir %>/styles/app.min.css',
 					'<%= rootDir %>/<%= srcDir %>/**/*.js',
 					'!<%= rootDir %>/<%= srcDir %>/**/*.spec.js'
 				]
@@ -301,6 +309,10 @@ grunt.log.writeln('dirList:', dirList);
 
 	});
 
+	grunt.registerTask('concatComponent', 'Concat component files.', function() {
+
+	});
+
 	// grunt.registerTask('copyLess', 'Copy less files to build directory.', ['copy:less']);
 
 	grunt.registerTask('buildLess', 'Copy and build less to styles.', ['copy:less', 'less:build']);
@@ -335,7 +347,10 @@ grunt.log.writeln('less');
 			} else if (filepath.indexOf('.js') > -1) {
 grunt.log.writeln('js');
 				// run js task
-				grunt.task.run(['clean:js', 'concatComponents']);
+				// grunt.task.run(['clean:js', 'concatComponents']);
+				// grunt.task.run('concatComponents');
+				grunt.log.writeln(filepath);
+				grunt.config.filePath = filepath;
 
 				// grunt.task.run('clean:js');
 				// grunt.task.run('concatComponents');

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app" ng-controller="mainCtrl as vm">
+<head>
+	<meta charset="UTF-8">
+	<title>ng-table Demo</title>
+	<link rel="stylesheet" href="./../../../../../../node_modules/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="./../../../../../vendor/ng-table/dist/ng-table.css">
+</head>
+
+<body>
+	<table ng-table="vm.tableParams" class="table" show-filter="true">
+		<tr ng-repeat="user in $data">
+			<td title="'name'" filter="{ name: 'text' }" sortable="'name'">
+				{{ user.name }}
+			</td>
+			<td title="'age'" filter="{ age: 'number' }" sortable="'name'">
+				{{ user.age }}
+			</td>
+		</tr>
+	</table>
+	<script src="./../../../../../../node_modules/angular/angular.js"></script>
+	<script src="./../../../../../vendor/ng-table/dist/ng-table.js"></script>
+
+	<script>
+		(function(angular) {
+			'use strict';
+
+			angular
+				.module('app', ['ngTable'])
+				.controller('mainCtrl', ['$scope', 'NgTableParams', 
+					function($scope, NgTableParams) {
+						var vm = this;
+
+						var data = [
+							{
+								name: 'abc',
+								age: 8
+							}, {
+								name: 'abc',
+								age: 8
+							}, {
+								name: 'abc',
+								age: 8
+							}
+						];
+
+						vm.tableParams = new NgTableParams({}, { dataset: data });
+					}
+				]);
+		}(angular));
+	</script>
+</body>
+</html>
