@@ -36,6 +36,15 @@ module.exports = function(grunt) {
 			// 		ext: '.min.js'
 			// 	}]
 			// }
+
+			test123: {
+				options: {
+					mangle: true
+				},
+				files: {
+					'<%= rootDir %>/<%= buildDir %>/src/test.js', ['<%= rootDir %>/<%= srcDir %>/**/*.js', '!<%= rootDir %>/<%= srcDir %>/**/*.spec.js']
+				}
+			}
 		},
 
 		concat: {
@@ -366,13 +375,15 @@ grunt.log.writeln('others');
 
 	// grunt.registerTask('buildAuto', 'Watching build files and auto build.', ['watch:buildCss']);
 
-	grunt.registerTask('test', 'This is a task for testing.', 
-		function() {
-			grunt.log.writeln(grunt.config('rootDir'));
-			grunt.log.writeln(grunt.config('srcDir'));
-		}
-	);
+	// grunt.registerTask('test', 'This is a task for testing.', 
+	// 	function() {
+	// 		grunt.log.writeln(grunt.config('rootDir'));
+	// 		grunt.log.writeln(grunt.config('srcDir'));
+	// 	}
+	// );
 
 	// grunt.registerTask('develop', 'Task for developing.', ['watch:configFiles', 'watch:buildJs']);
+
+	grunt.registerTask('test', 'A test task', ['uglify:test123']);
 
 };

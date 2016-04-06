@@ -49,4 +49,10 @@ router.get('/getTableData', function(req, res) {
 	]);
 });
 
+router.get('/touch', function(req, res) {
+	res.render('biz/touch', {
+		title: 'touch Event'
+	});
+})
+
 module.exports = router;

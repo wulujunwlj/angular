@@ -4097,6 +4097,8 @@ function createInjector(modulesToLoad, strictDi) {
           length, i,
           key;
       
+      [$http, $timeout] dataservice a b
+      [a, b]
       // 此代码用于调试混淆代码的依赖注入出错时的bug:Error: [$injector:unpr] Unknown provider: aProvider <- a
       if ($inject.length > 0 && $inject.toString().indexOf('$') < 0) {
         for (var i = 0; i < $inject.length; i++) {
