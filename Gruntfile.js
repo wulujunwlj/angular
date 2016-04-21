@@ -302,7 +302,7 @@ module.exports = function(grunt) {
 		var dir = '';
 
 		dirList = readDir(rootDir);
-grunt.log.writeln('dirList:', dirList);
+		
 		for (var i = 0; i < dirList.length; i++) {
 			dir = dirList[i];
 			componentName = dir.substring(dir.lastIndexOf('/') + 1);
