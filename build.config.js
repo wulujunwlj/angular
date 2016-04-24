@@ -6,11 +6,11 @@ module.exports = {
 
 	rootDir: 'webapp',
 
-	srcDir: 'src/app',
+	srcDir: 'webapp/src/app',
 
-	buildDir: 'build',
+	buildDir: 'webapp/build',
 
-	distDir: 'dist',
+	distDir: 'webapp/dist',
 
 	appFiles: {
 		lessFiles: [
