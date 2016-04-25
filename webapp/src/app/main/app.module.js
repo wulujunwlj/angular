@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('app', ['ui.router', 'oc.lazyLoad', 'core'])
+		.module('app', ['ui.router', 'oc.lazyLoad'])
 		.constant('app', {
 			name: 'angular-components',
 			version: '0.0.1'

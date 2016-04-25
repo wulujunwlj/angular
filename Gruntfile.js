@@ -24,7 +24,8 @@ module.exports = function(grunt) {
 					'<%= buildDir %>/scripts/app.js': [
 						'<%= srcDir %>/app.module.js', 
 						'<%= srcDir %>/app.config.js', 
-						'<%= srcDir %>/app.routes.js'
+						'<%= srcDir %>/app.routes.js',
+						'<%= srcDir %>/app.config.lazyload.js'
 					],
 				}
 			}
