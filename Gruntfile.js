@@ -69,7 +69,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('buildApp', 'build main files for project.', 
 		function() {
 			grunt.task.run('concat:dev');
-			grunt.task.run('less:dev');
+			grunt.task.run('less:dev');	
 		}
 	);
 
@@ -87,4 +87,5 @@ module.exports = function(grunt) {
 			grunt.task.run('concat:dev');
 		}
 	);
+
 };

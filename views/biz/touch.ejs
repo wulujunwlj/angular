@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<style>
+	.wrapper {
+		width: 600px;
+		height: 400px;
+		background: #ACACAC;
+	}
+	</style>
+</head>
+
+<body>
+	<div class="wrapper" id="wrapper"></div>
+
+	<div class="eventsList" id="eventsList"></div>
+
+	<script>
+		(function() {
+			function load() {
+				var $elem = document.querySelector('#wrapper');
+				var $eventsList = document.querySelector('#eventsList');
+
+				$elem.addEventListener('touchstart', function(evt) {
+					var item = document.createElement('p');
+					item.innerHTML = evt.type + ' -- ' + '(' + evt.touches[0].clientX + ', ' + evt.touches[0].clientY + ')';
+
+					$eventsList.appendChild(item);
+					// evt.preventDefault();
+				});
+
+				$elem.addEventListener('touchmove', function(evt) {
+					var item = document.createElement('p');
+					item.innerHTML = evt.type + ' -- ' + '(' + evt.touches[0].clientX + ', ' + evt.touches[0].clientY + ')';
+
+					$eventsList.appendChild(item);
+					// evt.preventDefault();
+				});
+
+				$elem.addEventListener('touchend', function(evt) {
+					var item = document.createElement('p');
+					item.innerHTML = evt.type;
+
+					$eventsList.appendChild(item);
+					// evt.preventDefault();
+				});
+			}
+
+			window.addEventListener('load', load, false);
+		}());
+	</script>
+</body>
+</html>
