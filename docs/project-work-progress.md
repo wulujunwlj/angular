@@ -19,6 +19,7 @@ grunt 相关插件使用
 * grunt-contrib-watch
 * grunt-ng-annotate (@20160314 - 注解)
 * grunt-jscs (@20160314 - js code style )
+* grunt-uncss (@20160422 - 移除页面不用的样式文件)
 
 
 `svn 同步 grunt 插件`
